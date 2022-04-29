@@ -1,13 +1,141 @@
-body {
+*{
+  box-sizing: border-box;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: darkgray;
+  color: white;
+}
+
+header{
+  padding: 2rem 1rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+header h1{
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: black;
+  margin-bottom: 1rem;
+}
+
+#task_form{
+  display: flex;
+}
+
+input, button{
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
+} 
+
+#task_Input{
+  flex: 1 1 0%;
+  background-color: black;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+#submit{
+  color: tomato;
+  font-size: 1rem;
+  font-weight: 600;
+  background-image: linear-gradient(to right,blue,red);
+  cursor: pointer;
+  border-radius: 1rem;
+
+}
+
+#submit:hover{
+  opacity: 0.8;
+}
+
+#submit:active{
+  opacity: 0.6;
+}
+
+main{
+  flex: 1 1 0%;
+  padding: 2rem 1rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.task{
+  padding: 1rem;
+}
+
+h2{
+  font-size: 1rem;
+  font-weight: 300;
+  color: yellow;
+  margin-bottom: 1rem;
+}
+#task .task {
+  display: flex;
+  justify-content: space-between;
+  background-color: black;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+#task .task .content .text{
+  color: gray;
+  font-size: 1.125rem;
+  width: 100%;
+  display: block;
+  transition: 0.4s;
+
+}
+#task .task .content .text:read-only{
+  color: white;
+}
+
+#task .task .click {
+  display: flex;
+  margin: 0 -0.5rem;
+  color: darkgray;
+}
+
+.task .click button{
+  cursor: pointer;
+  margin: 0 0.5rem;
+  font-size: 1.125rem;
+  color: gray;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.4s;
+
+
+}
+
+.task .click button:hover{
+  opacity: 0.8;
+}
+
+.task .click button:active{
+  opacity: 0.6;
+}
+
+.task .click .edit {
+  color: yellowgreen;
+  /* background-image: linear-gradient(to right,blue,red); */
+  border-radius: 1rem;
+}
+
+.task .click .delete {
+  color: red;
+  border-radius: 1rem;
 }
