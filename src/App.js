@@ -1,6 +1,6 @@
 import './App.css';
 import { firestore } from './utils/firebase'
-import { collection, addDoc, onSnapshot, deleteDoc, doc, setDoc} from "firebase/firestore"; 
+import { collection, addDoc, onSnapshot, deleteDoc, doc, setDoc, where, query} from "firebase/firestore"; 
 import { useEffect, useState } from 'react'
 import SignIn from './components/SignIn'
 import Register from './components/Register';
@@ -11,7 +11,8 @@ function App() {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [notesFromDb, setNotesFromDb] = useState([])
   const [notesLoading , setNotesLoading] = useState(false)
-  const [activeComponent, setActiveComponent] = useState('home')
+  // const [activeComponent, setActiveComponent] = useState('home')
+
   
   const [user, setUser] = useState({
     email: '',
@@ -20,26 +21,47 @@ function App() {
 
   })
   
-  useEffect(() => 
+  useEffect(() => {
 
+    const collectionRef = collection(firestore,"to-do-list")
+    const queryParams = where('uid', '==', user.uid)
+    const notesQuery = query(collectionRef, queryParams)
     // onsnapshot is used so the data will update itself
-    onSnapshot(collection(firestore,"to-do-list"),(snapshot) =>{ 
+    onSnapshot(notesQuery, (snapshot) =>{ 
+
       setNotesLoading(true);
       setNotesFromDb(snapshot.docs.map((doc) => ({...doc.data(), id:doc.id})));
       setNotesLoading(false)
     })
-  );
+  });
   
+  function handleUserRecieved(user){
+    console.log(user)
+    setUser({
+      email: user.email,
+      uid: user.uid,
+      userName: user.displayName,
+    })
+
+  }
+
+  function handleLogOut(){
+      
+    setUser({
+      email: '',
+      uid: '',
+      userName: '',
+    })
+  }
    
-  const UpdateNote =  (event)=>{
+  function UpdateNote(event){
     setNote(event.target.value)
   }
 
   const onClickHandler = async () =>{
-    // console.log(notesFromDb)
     setButtonLoading(true)
     const collectionRef = collection(firestore, "to-do-list");
-    const payload = { note: note }
+    const payload = { note: note, uid:user.uid }
     await addDoc( collectionRef, payload );
     setNote('');
     setButtonLoading(false)
@@ -60,24 +82,29 @@ function App() {
 
   
   return (
-
-    <div className="App">
+    // placed these brackets here
+    <> 
+        <div className="App">
       <header>
-
-        <input type="text" onChange={ UpdateNote }  value={ note } id="task_Input"  name='nameOfNote' placeholder="What's Next!"/>
-        {buttonLoading ? <p>Loading....</p> : <button onClick={onClickHandler}  id="submit" name='addNoteButton'>Submit</button>}
+        {user.uid &&
+        <div>
+          <input type="text" onChange={ UpdateNote }  value={ note } id="task_Input"  name='nameOfNote' placeholder="What's Next!"/>
+          {buttonLoading ? <p>Loading....</p> : <button onClick={onClickHandler}  id="submit" name='addNoteButton'>Submit</button>}
+        </div>
+        }
         {/* condition ? run if true : run if false */}
+      
         {!user.uid && 
           <div>
-            <SignIn />
-            <Register />
+            <SignIn handleUserRecieved={handleUserRecieved} />
+            <Register handleUserRecieved={handleUserRecieved}/>
 
           </div>
           
         }
         
       </header>
-
+      {user.uid &&
       <main>
           <h2>THINGS TO DO</h2>
           <div id="task">
@@ -95,14 +122,16 @@ function App() {
 
               </ul>
             }    
-            
-
           </div>
       </main>
-
-
+      }
+      {user.uid && 
+      <button onClick={handleLogOut}>Log Out</button>
+      }
 
     </div>
+
+    </>
   );
 }
 
