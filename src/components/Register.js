@@ -3,11 +3,11 @@ import { auth } from '../utils/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 
 
-export default  function Register() {
+export default  function Register(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    async function handleRegister(props){
+    async function handleRegister(){
         const res = await createUserWithEmailAndPassword(auth,email,password) 
         console.log(res)
     }
