@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 *{
   box-sizing: border-box;
   margin: 0;
@@ -131,7 +136,7 @@ h2{
 
 .task .click .edit {
   color: yellowgreen;
-  /* background-image: linear-gradient(to right,blue,red); */
+  background-image: linear-gradient(to right,blue,red);
   border-radius: 1rem;
 }
 
