@@ -1,6 +1,5 @@
-import './App.css';
 import { firestore } from './utils/firebase'
-import { collection, addDoc, onSnapshot, deleteDoc, doc, setDoc, where, query} from "firebase/firestore"; 
+import { collection, addDoc, onSnapshot, deleteDoc, doc, where, query, updateDoc} from "firebase/firestore"; 
 import { useEffect, useState } from 'react'
 import SignIn from './components/SignIn'
 import Register from './components/Register';
@@ -46,12 +45,13 @@ function App() {
   }
 
   function handleLogOut(){
-      
     setUser({
       email: '',
       uid: '',
       userName: '',
     })
+    alert('Your logged out')
+
   }
    
   function UpdateNote(event){
@@ -75,8 +75,11 @@ function App() {
   const handleEdit = async(id) => {
     const note = prompt('Change Your Note Here!')
     const docRef = doc(firestore,"to-do-list",id)
-    const payload = {note}
-    setDoc(docRef, payload)
+    const payload = {
+      note: note
+    }
+    console.log(note)
+    updateDoc(docRef, payload)
     setNote('');
   }
 
@@ -84,7 +87,7 @@ function App() {
   return (
     // placed these brackets here
     <> 
-        <div className="App">
+      <div className="flex flex-col items-center">
       <header>
         {user.uid &&
         <div>
@@ -95,7 +98,7 @@ function App() {
         {/* condition ? run if true : run if false */}
       
         {!user.uid && 
-          <div>
+          <div className='mt-10'>
             <SignIn handleUserRecieved={handleUserRecieved} />
             <Register handleUserRecieved={handleUserRecieved}/>
 
@@ -106,29 +109,35 @@ function App() {
       </header>
       {user.uid &&
       <main>
-          <h2>THINGS TO DO</h2>
-          <div id="task">
+          <h2>THINGS TO DO:</h2>
+          <div className=''>
 
             { notesLoading ? <p>Loading....</p> : 
+            
               <ul>
                 {notesFromDb.map((note) => {
                   return(
-                    <li key={note.id}>{ note.note }
-                     <button id="edit" onClick={()=> (handleEdit(note.id))}>Edit</button>
-                     <button id='delete' onClick={()=> (handleDelete(note.id))}>Delete</button>
-                    </li> 
+                    <div className='m-1 p-4 bg-gradient-to-r from-gray-600 to-blue-800 rounded'>
+                      <li key={note.id}>{ note.note }
+                      <input type="text"  value={ note } id="task_Input"  name='nameOfNote' placeholder="What's Next!"/>
+
+                        <div className='float-right '>
+                        <button className='text-green-600   px-2 py-1 mr-2'  onClick={()=> (handleEdit(note.id))}>Edit</button>
+                        <button className='text-red-600  ' onClick={()=> (handleDelete(note.id))}>Delete</button>
+                        </div>
+                      </li> 
+                    </div>
                   )
                 })}
-
               </ul>
             }    
           </div>
       </main>
       }
       {user.uid && 
-      <button onClick={handleLogOut}>Log Out</button>
-      }
 
+      <button className='flex border-solid max-w-xs justify-center py-2 px-4 rounded' onClick={handleLogOut}>Log Out</button>
+      }
     </div>
 
     </>
