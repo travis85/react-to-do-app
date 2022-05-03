@@ -21,9 +21,9 @@ export default function SignIn(props) {
 
   return (
     <div>
-        <input type='text' placeholder='Email' value={ email } onChange={ updateEmail }></input>
-        <input type='password' placeholder='Password' value={ password } onChange={ updatePassword }></input>
-        <button onClick={()=> (handleSignIn())}>Sign In</button>
+        <input className='bg-gray-400 border-white border-solid px-4 py-2 placeholder-white' type='text' placeholder='Email' value={ email } onChange={ updateEmail }></input>
+        <input className='bg-gray-400 border-white border-solid px-4 py-2 m-4 placeholder-white' type='password' placeholder='Password' value={ password } onChange={ updatePassword }></input>
+        <button className='text-white hover:text-slate-400' onClick={()=> (handleSignIn())}>Sign In</button>
 
     </div>
   )
